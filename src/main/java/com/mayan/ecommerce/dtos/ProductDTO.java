@@ -1,12 +1,18 @@
 package com.mayan.ecommerce.dtos;
 
 import com.mayan.ecommerce.entities.Product;
+import jakarta.validation.constraints.*;
 
 public class ProductDTO {
 
     private Long id;
+    @NotBlank(message = "Campo obrigatório")
+    @Size(min = 3, max = 80, message = "Nome deve ter entre 3 e 80 caracteres")
     private String name;
+    @NotBlank(message = "Campo obrigatório")
+    @Size(min = 10, message = "Descrição deve ter no mínimo 10 caracteres")
     private String description;
+    @Positive(message = "Preço deve ser um valor positivo")
     private Double price;
     private String imgUrl;
 

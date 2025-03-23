@@ -2,6 +2,7 @@ package com.mayan.ecommerce.controllers;
 
 import com.mayan.ecommerce.dtos.ProductDTO;
 import com.mayan.ecommerce.services.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,7 +32,7 @@ public class ProductController {
            }
 
     @PostMapping
-    public ResponseEntity<ProductDTO> create(@RequestBody ProductDTO dto) {
+    public ResponseEntity<ProductDTO> create(@Valid @RequestBody ProductDTO dto) {
         dto = service.create(dto);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(dto.getId()).toUri();
         return ResponseEntity.created(uri).body(dto);
