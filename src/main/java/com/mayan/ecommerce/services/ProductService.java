@@ -9,8 +9,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ProductService {
@@ -25,8 +23,31 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public ProductDTO getById(Long id) {
+    public ProductDTO findById(Long id) {
         Product result = repository.findById(id).get();
         return new ProductDTO(result);
+    }
+
+    @Transactional
+    public ProductDTO create(ProductDTO dto) {
+        Product result = new Product();
+        copyDtoToEntity(dto, result);
+        result = repository.save(result);
+        return new ProductDTO(result);
+    }
+
+    @Transactional
+    public ProductDTO update(Long id, ProductDTO dto) {
+        Product result = repository.getReferenceById(id);
+        copyDtoToEntity(dto, result);
+        result = repository.save(result);
+        return new ProductDTO(result);
+    }
+
+    private void copyDtoToEntity(ProductDTO dto, Product entity) {
+        entity.setName(dto.getName());
+        entity.setDescription(dto.getDescription());
+        entity.setPrice(dto.getPrice());
+        entity.setImgUrl(dto.getImgUrl());
     }
 }
