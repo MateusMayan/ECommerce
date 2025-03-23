@@ -3,6 +3,7 @@ package com.mayan.ecommerce.services;
 import com.mayan.ecommerce.dtos.ProductDTO;
 import com.mayan.ecommerce.entities.Product;
 import com.mayan.ecommerce.repositories.ProductRepository;
+import com.mayan.ecommerce.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,7 +25,9 @@ public class ProductService {
 
     @Transactional(readOnly = true)
     public ProductDTO findById(Long id) {
-        Product result = repository.findById(id).get();
+        Product result = repository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Produto não encontrado.")
+        );
         return new ProductDTO(result);
     }
 
