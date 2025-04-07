@@ -1,6 +1,7 @@
 package com.mayan.ecommerce.services;
 
 import com.mayan.ecommerce.dtos.ProductDTO;
+import com.mayan.ecommerce.dtos.ProductMinDTO;
 import com.mayan.ecommerce.entities.Product;
 import com.mayan.ecommerce.repositories.ProductRepository;
 import com.mayan.ecommerce.services.exceptions.DatabaseException;
@@ -22,9 +23,9 @@ public class ProductService {
     private ProductRepository repository;
 
     @Transactional(readOnly = true)
-    public Page<ProductDTO> findAll(String name, Pageable pageable) {
+    public Page<ProductMinDTO> findAll(String name, Pageable pageable) {
         Page<Product> result = repository.searchByName(name, pageable);
-        return result.map(product -> new ProductDTO(product));
+        return result.map(product -> new ProductMinDTO(product));
     }
 
     @Transactional(readOnly = true)
