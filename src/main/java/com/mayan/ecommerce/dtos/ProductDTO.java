@@ -1,7 +1,11 @@
 package com.mayan.ecommerce.dtos;
 
+import com.mayan.ecommerce.entities.Category;
 import com.mayan.ecommerce.entities.Product;
 import jakarta.validation.constraints.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProductDTO {
 
@@ -15,6 +19,9 @@ public class ProductDTO {
     @Positive(message = "Preço deve ser um valor positivo")
     private Double price;
     private String imgUrl;
+
+    @NotEmpty(message = "Deve ter ao menos uma categoria.")
+    private List<CategoryDTO> categories = new ArrayList<>();
 
     public ProductDTO() {
     }
@@ -33,6 +40,9 @@ public class ProductDTO {
         description = entity.getDescription();
         price = entity.getPrice();
         imgUrl = entity.getImgUrl();
+        for (Category category : entity.getCategories()) {
+            categories.add(new CategoryDTO(category));
+        }
     }
 
     public Long getId() {
@@ -53,5 +63,9 @@ public class ProductDTO {
 
     public String getImgUrl() {
         return imgUrl;
+    }
+
+    public List<CategoryDTO> getCategories() {
+        return categories;
     }
 }

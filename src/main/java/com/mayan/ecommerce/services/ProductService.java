@@ -1,7 +1,9 @@
 package com.mayan.ecommerce.services;
 
+import com.mayan.ecommerce.dtos.CategoryDTO;
 import com.mayan.ecommerce.dtos.ProductDTO;
 import com.mayan.ecommerce.dtos.ProductMinDTO;
+import com.mayan.ecommerce.entities.Category;
 import com.mayan.ecommerce.entities.Product;
 import com.mayan.ecommerce.repositories.ProductRepository;
 import com.mayan.ecommerce.services.exceptions.DatabaseException;
@@ -72,5 +74,12 @@ public class ProductService {
         entity.setDescription(dto.getDescription());
         entity.setPrice(dto.getPrice());
         entity.setImgUrl(dto.getImgUrl());
+
+        entity.getCategories().clear();
+        for (CategoryDTO categoryDTO : dto.getCategories()) {
+            Category category = new Category();
+            category.setId(categoryDTO.getId());
+            entity.getCategories().add(category);
+        }
     }
 }
