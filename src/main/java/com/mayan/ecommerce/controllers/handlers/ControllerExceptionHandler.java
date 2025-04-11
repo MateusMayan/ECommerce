@@ -3,6 +3,7 @@ package com.mayan.ecommerce.controllers.handlers;
 import com.mayan.ecommerce.dtos.CustomError;
 import com.mayan.ecommerce.dtos.ValidationError;
 import com.mayan.ecommerce.services.exceptions.DatabaseException;
+import com.mayan.ecommerce.services.exceptions.ForbiddenException;
 import com.mayan.ecommerce.services.exceptions.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -58,4 +59,18 @@ public class ControllerExceptionHandler {
 
         return ResponseEntity.status(status).body(err);
     }
+
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<CustomError> forbidden(ForbiddenException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.FORBIDDEN;
+        CustomError err = new CustomError(
+                Instant.now(),
+                status.value(),
+                e.getMessage(),
+                request.getRequestURI()
+        );
+        return ResponseEntity.status(status).body(err);
+    }
+
+
 }
