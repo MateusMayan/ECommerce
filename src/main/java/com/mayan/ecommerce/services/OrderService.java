@@ -7,6 +7,7 @@ import com.mayan.ecommerce.entities.*;
 import com.mayan.ecommerce.repositories.OrderItemRepository;
 import com.mayan.ecommerce.repositories.OrderRepository;
 import com.mayan.ecommerce.repositories.ProductRepository;
+import com.mayan.ecommerce.services.exceptions.ForbiddenException;
 import com.mayan.ecommerce.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,11 +30,15 @@ public class OrderService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private AuthService authService;
+
     @Transactional(readOnly = true)
     public OrderDTO findById(Long id) {
         Order result = repository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Pedido não encontrado.")
         );
+        authService.validateSelfOrAdmin(result.getClient().getId());
         return new OrderDTO(result);
     }
 
